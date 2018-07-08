@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Activities.AddTargetActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etAddTopicName"
+            android:background="#00000000"
+            android:hint="Topic you want to do"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/ivSeparator"
+            android:background="@color/colorAccent"
+            android:layout_below="@+id/etAddTopicName"
+            android:layout_marginTop="16dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/ivSeparator"
+            android:layout_marginTop="16dp"
+            android:id="@+id/llDate">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDateHeading"
+                android:text="Completion Date:"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/ivLLSeparatorDate"
+                android:background="#00000000"
+                android:layout_weight="4"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDateToStore"
+                android:text="Today's date"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/llDate"
+            android:layout_marginTop="50dp"
+            android:id="@+id/llTime">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvTimeHeading"
+                android:text="Completion Time:"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/ivLLSeparatorTime"
+                android:background="#00000000"
+                android:layout_weight="4"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvTimeToStore"
+                android:text="Time Right Now"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+        <Button
+            android:id="@+id/btSubmitAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:text="SUBMIT"
+            android:scaleType="fitCenter"
+            android:layout_below="@+id/llTime"
+            android:layout_margin="50dp"
+            android:src="@drawable/submit"
+             />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

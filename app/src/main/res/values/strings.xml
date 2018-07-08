@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">TargetTracker</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sample_task">Sample Task</string>
+    <string name="sample_date">30/05/2018</string>
+    <string name="sample_time">14:55</string>
+    <string name="sample_start_date">30/05/2018</string>
+    <string name="target_tracker">Target Tracker</string>
+    <string name="sample_email">UserEmail@gmail.com</string>
+    <string name="completed_task">Completed Task</string>
+    <string name="current_tasks">Current Tasks</string>
+    <string name="incomplete_tasks">Incomplete Tasks</string>
+    <string name="enter_finish_date_string">Enter Finish Date</string>
+    <string name="enter_finish_time_string">Enter finish Time</string>
+    <string name="enter_topic_name_string">Enter Topic Name</string>
+    <string name="sure_text">Are you sure</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="title_activity_add_target">AddTargetActivity</string>
+    <string name="String_menu_progress">Progress</string>
+</resources>
