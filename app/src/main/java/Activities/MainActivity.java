@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
               // createPopup();
-                //TODO:Start add target activity
+
                 startActivity(new Intent(MainActivity.this,AddTargetActivity.class));
             }
         });
