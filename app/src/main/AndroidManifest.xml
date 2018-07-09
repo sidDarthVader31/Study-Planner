@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="siddharthbisht.targettracker">
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,17 +19,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="Activities.AddTargetActivity">
+        <activity android:name="Activities.AddTargetActivity"></activity>
 
-        </activity>
-        <receiver android:name="Receiver.AlarmReceiver"
+        <receiver
+            android:name="Receiver.AlarmReceiver"
             android:enabled="true"
-            android:exported="false">
-        </receiver>
-        <receiver android:name="Receiver.SetDueOnComplete"
+            android:exported="false"></receiver>
+        <receiver
+            android:name="Receiver.SetDueOnComplete"
             android:enabled="true"
-            android:exported="false">
-        </receiver>
+            android:exported="false"></receiver>
+
+        <activity android:name="Activities.GraphActivity"></activity>
     </application>
 
 </manifest>
