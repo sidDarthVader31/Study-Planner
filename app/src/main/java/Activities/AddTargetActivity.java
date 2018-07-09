@@ -1,10 +1,6 @@
 package Activities;
-
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -18,17 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-
 import java.util.Calendar;
-
 import Data.DataBaseHandler;
-
 import Model.Target;
-import Receiver.AlarmReceiver;
-import Receiver.SetDueOnComplete;
 import Util.AlarmCreater;
-import Util.CurrentDateAndTime;
 import Util.Validator;
 import siddharthbisht.targettracker.R;
 
@@ -46,6 +35,7 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG," inside on create");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_target2);
         etTopic = findViewById(R.id.etAddTopicName);
@@ -144,7 +134,7 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
                         saveTargetToDb(v, sYear, sMonth, sDate, sHour, sMinute);
                     }
                     else {
-                        Toast.makeText(AddTargetActivity.this,"Enter time",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddTargetActivity.this,"Enter time atleast an hour ahead",Toast.LENGTH_SHORT).show();
                     }
                 }
 
