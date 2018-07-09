@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.itIncompleteTask) {
             showFragment(NotCompletedTaskFragment.class);
         } else if (id == R.id.itSettings) {
-            //start Activity for settings
+            startActivity(new Intent(MainActivity.this,GraphActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
