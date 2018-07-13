@@ -1,79 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:animateLayoutChanges="true"
+        android:elevation="4dp"
+        app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.068"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        app:layout_constraintVertical_bias="0.068">
 
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:padding="16dp">
 
             <TextView
                 android:id="@+id/tvTaskName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
                 android:text="@string/sample_task"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvFinishDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTaskName"
-                android:text="@string/sample_date"
-                android:layout_marginTop="8dp"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tvFinishTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTaskName"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="8dp"
-                android:layout_toEndOf="@+id/tvFinishDate"
-                android:text="@string/sample_time"
-                android:textSize="16sp" />
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/ivDelete"
-                android:layout_toStartOf="@+id/ivCompleted"
-                android:src="@drawable/ic_delete_black_24dp"
-                android:layout_below="@+id/tvTaskName"
-                android:layout_marginEnd="8dp"/>
+                android:textSize="16sp"
+                android:textStyle="normal" />
 
             <ImageView
-                android:id="@+id/ivCompleted"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                app:srcCompat="@drawable/ic_done_black_24dp"
-                />
+                android:id="@+id/ivAssignment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/ivSeparator"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/ic_assignment_ind_black_24dp" />
+
+            <ImageView
+                android:id="@+id/ivSeparator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/tvTaskName"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimaryDark" />
+
+            <LinearLayout
+                android:id="@+id/llLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivSeparator"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ivDateView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_date_range_black_24dp" />
+
+                <TextView
+                    android:id="@+id/tvFinishDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/sample_date"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/ivTimeView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:background="@drawable/ic_access_time_black_24dp" />
+
+                <TextView
+                    android:id="@+id/tvFinishTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/sample_time"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/ivDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:background="@drawable/ic_delete_black_24dp" />
+
+                <ImageView
+                    android:id="@+id/ivDone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:background="@drawable/ic_done_black_24dp" />
+
+            </LinearLayout>
+
 
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
-
-</LinearLayout>
