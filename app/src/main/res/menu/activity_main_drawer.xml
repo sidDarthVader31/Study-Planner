@@ -6,34 +6,22 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/itCurrentTask"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_assignment_black_24dp"
             android:title="@string/current_tasks" />
         <item
             android:id="@+id/itCompletedTask"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_assignment_turned_in_black_24dp"
             android:title="@string/completed_task" />
         <item
             android:id="@+id/itIncompleteTask"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/baseline_assignment_late_24"
             android:title="@string/incomplete_tasks" />
         <item
             android:id="@+id/itSettings"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Settings" />
+            android:icon="@drawable/ic_show_chart_black_24dp"
+            android:title="@string/String_menu_progress" />
 
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
 
 </menu>

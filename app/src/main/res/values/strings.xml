@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TargetTracker</string>
+    <string name="app_name">Study Planner</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -15,7 +15,7 @@
     <string name="sample_start_date">30/05/2018</string>
     <string name="target_tracker">Target Tracker</string>
     <string name="sample_email">UserEmail@gmail.com</string>
-    <string name="completed_task">Completed Task</string>
+    <string name="completed_task">Completed Tasks</string>
     <string name="current_tasks">Current Tasks</string>
     <string name="incomplete_tasks">Incomplete Tasks</string>
     <string name="enter_finish_date_string">Enter Finish Date</string>
@@ -26,4 +26,13 @@
     <string name="yes">Yes</string>
     <string name="title_activity_add_target">AddTargetActivity</string>
     <string name="String_menu_progress">Progress</string>
+    <string name="delete">Delete</string>
+    <string name="reset">RESET</string>
+    <string name="string_mark_as_complete">Mark as complete</string>
+    <string name="title_activity_view_graph">ViewGraphActivity</string>
+    <string name="string_menu_reset">Reset</string>
+    <string name="string_reset_warning">Resetting will delete all data including the current todo list</string>
+    <string name="string_reset_proceed">Proceed?</string>
+    <string name="string_message_empty_list">There are no records to be displayed at the moment</string>
+    <string name="string_message_direction">Get started by clicking on the add button</string>
 </resources>
