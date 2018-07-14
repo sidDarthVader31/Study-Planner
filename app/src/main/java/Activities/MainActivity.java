@@ -108,10 +108,6 @@ public class MainActivity extends AppCompatActivity
             showFragment(NotCompletedTaskFragment.class);
         } else if (id == R.id.itSettings) {
             startActivity(new Intent(MainActivity.this,GraphActivity.class));
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
