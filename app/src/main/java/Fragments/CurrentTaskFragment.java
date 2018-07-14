@@ -1,6 +1,5 @@
 package Fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,19 +10,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import Adapters.RecyclerViewAdapter;
 import Data.DataBaseHandler;
 import Model.Target;
+import Util.RecyclerItemTouchHelper;
 import siddharthbisht.targettracker.R;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.widget.Toast;
 
 
-public class CurrentTaskFragment extends Fragment {
+public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private List<Target> targetList;
@@ -44,14 +45,22 @@ public class CurrentTaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_current_task, container, false);
         db=new DataBaseHandler(this.getContext());
-        recyclerView=view.findViewById(R.id.rvList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        targetList=new ArrayList<>();
-        listItems=new ArrayList<>();
-        initializeData();
+        View view;
+        if (db.getCurrentTaskCount()>0){
+             view= inflater.inflate(R.layout.fragment_current_task, container, false);
+            recyclerView=view.findViewById(R.id.rvList);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            targetList=new ArrayList<>();
+            listItems=new ArrayList<>();
+            initializeData();
+            ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT, this);
+            new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+        }
+        else{
+            view=inflater.inflate(R.layout.empty_main_layout,container,false);
+        }
         return view;
     }
 
@@ -91,8 +100,30 @@ public class CurrentTaskFragment extends Fragment {
             Log.d(TAG,String.valueOf(target.getCompletionStatus()));
 
         }
+        Collections.reverse(listItems);
         adapter=new RecyclerViewAdapter(this.getContext(),listItems);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        Log.d(TAG,"direction"+String.valueOf(direction));
+        if (viewHolder instanceof RecyclerViewAdapter.ViewHolder) {
+            if (direction == ItemTouchHelper.LEFT) {
+                // get the removed item name to display it in snack bar
+                Target target=targetList.get(viewHolder.getAdapterPosition());
+              Toast.makeText(getContext(),target.getTopic()+" deleted",Toast.LENGTH_SHORT).show();
+              adapter.removeTarget(target,viewHolder.getAdapterPosition());
+              Log.d(TAG,"direction Left:"+String.valueOf(direction));
+            }
+            else if (direction==ItemTouchHelper.RIGHT){
+                String name = targetList.get(viewHolder.getAdapterPosition()).getTopic();
+                Toast.makeText(getContext(), name+" is marked as complete", Toast.LENGTH_SHORT).show();
+                Target target = targetList.get(viewHolder.getAdapterPosition());
+                adapter.moveToDone(target, viewHolder.getAdapterPosition());
+                Log.d(TAG,"direction Right:"+String.valueOf(direction));
+            }
+        }
+    }
+
 }
