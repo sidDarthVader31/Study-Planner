@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import Adapters.ArchivedRecyclerViewAdapter;
 import Adapters.RecyclerViewAdapter;
 import Data.DataBaseHandler;
 import Model.Target;
@@ -21,7 +23,7 @@ import siddharthbisht.targettracker.R;
 
 public class NotCompletedTaskFragment extends Fragment {
     RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
+    private ArchivedRecyclerViewAdapter adapter;
     private List<Target> targetList;
     private List<Target> listItems;
     private DataBaseHandler db;
@@ -38,21 +40,29 @@ public class NotCompletedTaskFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-    View view=inflater.inflate(R.layout.fragment_not_completed_task, container, false);
         db=new DataBaseHandler(this.getContext());
-        recyclerView=view.findViewById(R.id.rvList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        targetList=new ArrayList<>();
-        listItems=new ArrayList<>();
-        initializeData();
+        View view;
+        if (db.getIncompleteTaskCount()>0){
+            view=inflater.inflate(R.layout.fragment_not_completed_task, container, false);
+
+            recyclerView=view.findViewById(R.id.rvListArchived);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            targetList=new ArrayList<>();
+            listItems=new ArrayList<>();
+            initializeData();
+        }
+        else {
+            view=inflater.inflate(R.layout.empty_layout,container,false);
+        }
+
 
     return view;
 
@@ -61,9 +71,7 @@ public class NotCompletedTaskFragment extends Fragment {
     private void initializeData() {
 
         //Get items from database
-
         targetList=db.getAllIncompleteTargets();
-
         for(Target c: targetList){
             Target target=new Target();
             target.setTopic(c.getTopic());
@@ -78,7 +86,8 @@ public class NotCompletedTaskFragment extends Fragment {
             Log.d(TAG,String.valueOf(target.getCompletionStatus()));
 
         }
-        adapter=new RecyclerViewAdapter(this.getContext(),listItems);
+        Collections.reverse(listItems);
+        adapter=new ArchivedRecyclerViewAdapter(this.getContext(),listItems);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
