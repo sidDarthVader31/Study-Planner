@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
@@ -31,21 +33,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     AlarmCreater creater;
     public static final String TAG="RecyclerVIewAdapter";
 
-    public RecyclerViewAdapter(Context context){
-        this.context=context;
-    }
     public RecyclerViewAdapter(Context context, List<Target> targetList) {
         this.context=context;
         this.targetList=targetList;
+        db=new DataBaseHandler(context);
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row,parent,false);
         return new ViewHolder(view,context);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Target target=targetList.get(position);
@@ -56,11 +54,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-
         return targetList.size();
     }
-    public List<Target> returnList(){
-        return targetList;
+
+    public void removeTarget(int id, int position) {
+        Target target=db.getTarget(id);
+        long time=getTimeInMillis(target.getFinishYear(),target.getFinishMonth(),target.getFinishDate(),target.getFinishHour(),target.getFinishMinute());
+        creater=new AlarmCreater();
+        creater.DeleteAlarm(context,id,target.getTopic(),time);
+        db.DeleteTarget(id);
+        targetList.remove(position);
+        notifyItemRemoved(position);
     }
 
     public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -69,14 +73,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView finishTime;
         public ImageView done;
         public ImageView delete;
-
+        public RelativeLayout viewBackground;
+        public RelativeLayout viewForeground;
         public ViewHolder(View itemView, Context ctx) {
             super(itemView);
             context=ctx;
             taskName=itemView.findViewById(R.id.tvTaskName);
             finishDate=itemView.findViewById(R.id.tvFinishDate);
             finishTime=itemView.findViewById(R.id.tvFinishTime);
-            done=itemView.findViewById(R.id.ivCompleted);
+            viewBackground=itemView.findViewById(R.id.view_background);
+            viewForeground=itemView.findViewById(R.id.view_foreground);
+            done=itemView.findViewById(R.id.ivDone);
             delete=itemView.findViewById(R.id.ivDelete);
             delete.setOnClickListener(this);
             done.setOnClickListener(this);
@@ -89,9 +96,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             switch (v.getId()){
                 case R.id.ivDelete:
                     target=targetList.get(position);
-                    deleteItem(target.getId(),position);
+                    removeTarget(target.getId(),position);
                     break;
-                case R.id.ivCompleted:
+                case R.id.ivDone:
                     target=targetList.get(position);
                     moveToDone(target,position);
                     break;
@@ -101,11 +108,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     }
-    private void deleteItem(final int id, final int position) {
-        alertDiaologBuilder=new AlertDialog.Builder(context);
+
+    public void moveToDone(Target target,int position){
+        db.updateCompletionStatus(target.getId());
+        targetList.remove(position);
+        Target target1=db.getTarget(target.getId());
+        notifyDataSetChanged();
+        notifyItemRemoved(position);
+        Log.d(TAG,target.getTopic()+" removed");
+        Log.d(TAG,"completion status: "+target1.getCompletionStatus());
+        Log.d(TAG,"due status: "+target1.getDue());
+    }
+
+    public long getTimeInMillis(int year,int month,int date,int hour,int minutes){
+        Calendar calendar=Calendar.getInstance();
+        calendar.set(year,month,date,hour,minutes,0);
+        Log.d("time:",String.valueOf(year)+"/"+String.valueOf(month)+"/"+String.valueOf(date)+" //"+String.valueOf(hour)+":"+String.valueOf(minutes));
+        return calendar.getTimeInMillis();
+    }
+    /*private void deleteItem(int id,int position) {
+
+       alertDiaologBuilder=new AlertDialog.Builder(context);
         inflater=LayoutInflater.from(context);
         View view=inflater.inflate(R.layout.confirmation_dialog,null);
-
         Button noButton=view.findViewById(R.id.noButton);
         Button yesButton=view.findViewById(R.id.yesButton);
         alertDiaologBuilder.setView(view);
@@ -118,7 +143,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 dialog.dismiss();
             }
         });
-        yesButton.setOnClickListener(new View.OnClickListener() {
+
+       yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //delete the item
@@ -133,22 +159,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 dialog.dismiss();
             }
         });
-    }
-    public void moveToDone(Target target,int position){
         db=new DataBaseHandler(context);
-        db.updateCompletionStatus(target.getId());
+        Target target=db.getTarget(id);
+        long time=getTimeInMillis(target.getFinishYear(),target.getFinishMonth(),target.getFinishDate(),target.getFinishHour(),target.getFinishMinute());
+        creater=new AlarmCreater();
+        creater.DeleteAlarm(context,id,target.getTopic(),time);
+        db.DeleteTarget(id);
         targetList.remove(position);
-        Target target1=db.getTarget(target.getId());
-        notifyDataSetChanged();
         notifyItemRemoved(position);
-        Log.d(TAG,target.getTopic()+" removed");
-        Log.d(TAG,"completion status: "+target1.getCompletionStatus());
-        Log.d(TAG,"due status: "+target1.getDue());
-    }
-    public long getTimeInMillis(int year,int month,int date,int hour,int minutes){
-        Calendar calendar=Calendar.getInstance();
-        calendar.set(year,month,date,hour,minutes,0);
-        Log.d("time:",String.valueOf(year)+"/"+String.valueOf(month)+"/"+String.valueOf(date)+" //"+String.valueOf(hour)+":"+String.valueOf(minutes));
-        return calendar.getTimeInMillis();
-    }
+    }*/
 }
