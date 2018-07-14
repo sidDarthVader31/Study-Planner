@@ -367,4 +367,20 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return cursor.getCount();
 
     }
+    public void deleteAllEntries(){
+        SQLiteDatabase db=getWritableDatabase();
+        db.delete(Constants.TABLE_NAME,null,null);
+        db.close();
+    }
+    public int getCurrentTaskCount(){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(Constants.TABLE_NAME,
+                new String[]{Constants.KEY_ID, Constants.KEY_TOPIC, Constants.KEY_DATE_ADDED, Constants.KEY_TIME_ADDED, Constants.KEY_FINISH_YEAR, Constants.KEY_FINISH_MONTH, Constants.KEY_FINISH_DATE, Constants.KEY_FINISH_HOURS, Constants.KEY_FINISH_MINUTES, Constants.KEY_COMPLETION_STATUS, Constants.KEY_DUE},
+                Constants.KEY_DUE + "=?" + " AND " + Constants.KEY_COMPLETION_STATUS + "=?",  new String[]{String.valueOf(0), String.valueOf(0)}, null, null, null);
+        //loop through the cursor to get all contacts
+
+
+        return cursor.getCount();
+
+    }
 }
