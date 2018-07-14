@@ -39,7 +39,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     PendingIntent.getBroadcast(context, 0, IntentDone, PendingIntent.FLAG_UPDATE_CURRENT);
             helper = new NotificationHelper(context);
             NotificationCompat.Builder nb = helper.getChannelNotification("Incomplete task", "Your " + topic + " is still pending");
-            nb.addAction(R.drawable.ic_menu_send, "Mark As Complete ", snoozePendingIntent);
+            nb.addAction(R.drawable.ic_send_black_24dp, "Mark As Complete ", snoozePendingIntent);
             helper.getManager().notify(id, nb.build());
         }
     }
