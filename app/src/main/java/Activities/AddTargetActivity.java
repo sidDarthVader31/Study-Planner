@@ -61,7 +61,7 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
     public void initializeDateTime() {
         Calendar calendar=Calendar.getInstance();
         mYear=calendar.get(Calendar.YEAR);
-        mMonth=calendar.get(Calendar.DAY_OF_MONTH);
+        mMonth=calendar.get(Calendar.MONTH);
         mDay=calendar.get(Calendar.DAY_OF_MONTH);
         mHour=calendar.get(Calendar.HOUR_OF_DAY);
         mMinute=calendar.get(Calendar.MINUTE);
@@ -74,7 +74,7 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
         sYear=mYear;
         sMonth=mMonth;
         sDate=mDay;
-        String s1=sDate+"/"+sMonth+"/"+sYear;
+        String s1=sDate+"/"+(sMonth)+"/"+sYear;
         Log.d("currentDate:",s1);
         sHour=mHour;
         sMinute=mMinute;
@@ -95,7 +95,7 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
                                 sMonth=monthOfYear;
                                 sDate=dayOfMonth;
                                 date.setText(sDate + "-" + (sMonth + 1) + "-" + sYear);
-                                String s=sYear+"/"+sMonth+"/"+sDate;
+                                String s=sYear+"/"+(sMonth+1)+"/"+sDate;
                                 Log.d("DatePicker:",s);
                             }
                         }, mYear, mMonth, mDay);
@@ -123,7 +123,7 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
             case R.id.btSubmitAdd:
                 if (etTopic.getText().toString().isEmpty()){
                     Toast.makeText(AddTargetActivity.this,"Enter topic name",Toast.LENGTH_SHORT).show();
-                    date.setText(mDay+"/"+mMonth+"/"+mYear);
+                    date.setText(mDay+"/"+(mMonth+1)+"/"+mYear);
                     time.setText(mHour+":"+mMinute);
                 }
                 else{
