@@ -52,4 +52,14 @@ public class AlarmCreater {
         Target target=handler.getTarget(id);//this line will not be included in the final version of the code
         Log.d("AlarmCreater:","setDueStatus set for:"+target.getTopic());//this line too
     }
+    public void DeleteDueStatus(Context context,int id,long timeInMillis){
+
+        AlarmManager alarmManager=(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent=new Intent(context, SetDueOnComplete.class);
+        intent.putExtra("id",id);
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(context,id,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,timeInMillis,pendingIntent);
+        alarmManager.cancel(pendingIntent);
+
+    }
 }
