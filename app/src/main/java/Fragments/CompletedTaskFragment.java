@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import Adapters.ArchivedRecyclerViewAdapter;
 import Adapters.RecyclerViewAdapter;
 import Data.DataBaseHandler;
 import Model.Target;
@@ -22,7 +24,7 @@ import siddharthbisht.targettracker.R;
 
 public class CompletedTaskFragment extends Fragment{
     RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
+    private ArchivedRecyclerViewAdapter adapter;
     private List<Target> targetList;
     private List<Target> listItems;
     private DataBaseHandler db;
@@ -44,14 +46,22 @@ public class CompletedTaskFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_completed_task, container, false);
         db=new DataBaseHandler(this.getContext());
-        recyclerView=view.findViewById(R.id.rvList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        targetList=new ArrayList<>();
-        listItems=new ArrayList<>();
-        initializeData();
+        View view;
+        if (db.getCompletedTaskCount()>0){
+            view= inflater.inflate(R.layout.fragment_completed_task, container, false);
+
+            recyclerView=view.findViewById(R.id.rvListArchived);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            targetList=new ArrayList<>();
+            listItems=new ArrayList<>();
+            initializeData();
+        }
+        else {
+            view=inflater.inflate(R.layout.empty_layout,container,false);
+        }
+
         return view;
     }
 
@@ -72,7 +82,8 @@ public class CompletedTaskFragment extends Fragment{
             Log.d(TAG,String.valueOf(target.getCompletionStatus()));
 
         }
-        adapter=new RecyclerViewAdapter(this.getContext(),listItems);
+        Collections.reverse(listItems);
+        adapter=new ArchivedRecyclerViewAdapter(this.getContext(),listItems);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
