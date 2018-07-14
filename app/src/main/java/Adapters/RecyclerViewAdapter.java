@@ -57,22 +57,43 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return targetList.size();
     }
 
-    public void removeTarget(int id, int position) {
-        Target target=db.getTarget(id);
-        long time=getTimeInMillis(target.getFinishYear(),target.getFinishMonth(),target.getFinishDate(),target.getFinishHour(),target.getFinishMinute());
-        creater=new AlarmCreater();
-        creater.DeleteAlarm(context,id,target.getTopic(),time);
-        db.DeleteTarget(id);
-        targetList.remove(position);
-        notifyItemRemoved(position);
-    }
+    public void removeTarget(final Target target, final int position) {
 
-    public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        alertDiaologBuilder=new AlertDialog.Builder(context);
+        inflater=LayoutInflater.from(context);
+        View view=inflater.inflate(R.layout.confirmation_dialog,null);
+        Button noButton=view.findViewById(R.id.noButton);
+        Button yesButton=view.findViewById(R.id.yesButton);
+        alertDiaologBuilder.setView(view);
+        dialog=alertDiaologBuilder.create();
+        dialog.show();
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+
+        yesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //delete the item
+                long time = getTimeInMillis(target.getFinishYear(), target.getFinishMonth(), target.getFinishDate(), target.getFinishHour(), target.getFinishMinute());
+                creater = new AlarmCreater();
+                creater.DeleteAlarm(context, target.getId(), target.getTopic(), time);
+                creater.DeleteDueStatus(context,target.getId(),time);
+                db.DeleteTarget(target.getId());
+                targetList.remove(position);
+                notifyItemRemoved(position);
+                //todo: returning a null pointer exception here...check it ..debug it..
+            }
+        });
+    }
+    public  class ViewHolder extends RecyclerView.ViewHolder {
         public TextView taskName;
         public TextView finishDate;
         public TextView finishTime;
-        public ImageView done;
-        public ImageView delete;
         public RelativeLayout viewBackground;
         public RelativeLayout viewForeground;
         public ViewHolder(View itemView, Context ctx) {
@@ -83,30 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             finishTime=itemView.findViewById(R.id.tvFinishTime);
             viewBackground=itemView.findViewById(R.id.view_background);
             viewForeground=itemView.findViewById(R.id.view_foreground);
-            done=itemView.findViewById(R.id.ivDone);
-            delete=itemView.findViewById(R.id.ivDelete);
-            delete.setOnClickListener(this);
-            done.setOnClickListener(this);
         }
-
-        @Override
-        public void onClick(View v) {
-            Target target;
-            int position=getAdapterPosition();
-            switch (v.getId()){
-                case R.id.ivDelete:
-                    target=targetList.get(position);
-                    removeTarget(target.getId(),position);
-                    break;
-                case R.id.ivDone:
-                    target=targetList.get(position);
-                    moveToDone(target,position);
-                    break;
-            }
-
-        }
-
-
     }
 
     public void moveToDone(Target target,int position){
