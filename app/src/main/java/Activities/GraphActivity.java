@@ -1,5 +1,7 @@
 package Activities;
 
+
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import Data.DataBaseHandler;
 import siddharthbisht.targettracker.R;
 
+
 public class GraphActivity extends AppCompatActivity {
     private static final String TAG="GraphActivity";
     private DataBaseHandler handler;
@@ -31,6 +34,7 @@ public class GraphActivity extends AppCompatActivity {
     private AlertDialog.Builder alertDiaologBuilder;
     private AlertDialog dialog;
     private LayoutInflater inflater;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,25 +65,22 @@ public class GraphActivity extends AppCompatActivity {
             PieDataSet pieDataSet=new PieDataSet(yAxis,"Progress");
             pieDataSet.setSliceSpace(2);
             pieDataSet.setValueTextSize(12);
-            //adding colors
 
+            //adding colors
             ArrayList<Integer> colors=new ArrayList<>();
             colors.add(Color.GREEN);
             colors.add(Color.RED);
             pieDataSet.setColors(colors);
 
             //create legend
-
             Legend legend=pieChart.getLegend();
             legend.setForm(Legend.LegendForm.CIRCLE);
             legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
 
             //create a pie data object
-
             PieData pieData=new PieData(pieDataSet);
             pieChart.setData(pieData);
             pieChart.invalidate();
-
             pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
                 @Override
                 public void onValueSelected(Entry e, Highlight h) {
@@ -90,7 +91,6 @@ public class GraphActivity extends AppCompatActivity {
                     }
                     else if(e.getY()==handler.getCompletedTaskCount()){
                         Toast.makeText(GraphActivity.this,"Completed tasks",Toast.LENGTH_SHORT).show();
-
                     }
                     else {
                         Log.d(TAG,"Values do not match");
@@ -99,15 +99,12 @@ public class GraphActivity extends AppCompatActivity {
 
                 @Override
                 public void onNothingSelected() {
-
                 }
             });
-
         }
         else{
             setContentView(R.layout.empty_layout);
         }
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,14 +112,12 @@ public class GraphActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_graph_activity, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_item_reset) {
             alertDiaologBuilder=new AlertDialog.Builder(GraphActivity.this);
@@ -149,10 +144,7 @@ public class GraphActivity extends AppCompatActivity {
                     startActivity(new Intent(GraphActivity.this,MainActivity.class));
                 }
             });
-
-
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
