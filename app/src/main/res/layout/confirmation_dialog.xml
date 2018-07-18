@@ -24,22 +24,23 @@
 
             <Button
                 android:id="@+id/noButton"
-                android:background="@color/colorAccent"
                 android:text="@string/no"
                 android:layout_marginTop="19dp"
                 android:layout_below="@id/textAlert"
                 android:textColor="@android:color/white"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
+                />
 
 
             <Button
                 android:id="@+id/yesButton"
                 android:layout_alignParentRight="true"
                 android:text="@string/yes"
-                android:background="@color/colorAccent"
+                android:background="@drawable/border_transparent"
                 android:layout_alignBottom="@id/noButton"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

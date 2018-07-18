@@ -34,9 +34,12 @@
 
             <Button
                 android:id="@+id/noButton"
-                android:background="@color/colorAccent"
+                android:background="@drawable/border"
                 android:text="@string/no"
                 android:layout_marginTop="19dp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:textSize="14sp"
                 android:layout_below="@id/textAlert"
                 android:textColor="@android:color/white"
                 android:layout_width="wrap_content"
@@ -47,9 +50,12 @@
                 android:id="@+id/yesButton"
                 android:layout_alignParentRight="true"
                 android:text="@string/yes"
-                android:background="@color/colorAccent"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:textSize="14sp"
+                android:background="@drawable/border_transparent"
                 android:layout_alignBottom="@id/noButton"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

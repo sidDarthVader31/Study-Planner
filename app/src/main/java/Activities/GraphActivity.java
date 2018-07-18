@@ -1,13 +1,9 @@
 package Activities;
-
-
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +11,6 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.Button;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -28,7 +23,6 @@ import siddharthbisht.targettracker.R;
 
 
 public class GraphActivity extends AppCompatActivity {
-    private static final String TAG="GraphActivity";
     private DataBaseHandler handler;
     PieChart pieChart;
     private AlertDialog.Builder alertDiaologBuilder;
@@ -41,41 +35,45 @@ public class GraphActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         GraphActivity.this.setTitle("Your Progress");
         handler=new DataBaseHandler(this);
-        if (handler.getCompletedTaskCount()>0 && handler.getIncompleteTaskCount()>0){
+        if (handler.getCompletedTaskCount()>0 || handler.getIncompleteTaskCount()>0){
             setContentView(R.layout.activity_graph);
             handler=new DataBaseHandler(this);
-            Log.d(TAG,"Inside on Create");
             pieChart=findViewById(R.id.pcPieChart);
             pieChart.setRotationEnabled(true);
-            pieChart.setHoleRadius(25f);
+            pieChart.setUsePercentValues(true);
+            pieChart.setHoleRadius(20f);
             pieChart.setTransparentCircleAlpha(0);
-            pieChart.setCenterText("Your Progress");
+            pieChart.setCenterText("Statistics");
             ArrayList<PieEntry> yAxis=new ArrayList<>();
             ArrayList<String> xAxis=new ArrayList<>();
             int[] yValues={handler.getCompletedTaskCount(),handler.getIncompleteTaskCount()};
             String[] xData={"Completed Task","Incomplete Task"};
-
             for (int i=0;i<yValues.length;i++){
                 yAxis.add(new PieEntry(yValues[i],i));
             }
             for (int i=0;i<xData.length;i++){
                 xAxis.add(xData[i]);
             }
+
+
             //creating the dataset
             PieDataSet pieDataSet=new PieDataSet(yAxis,"Progress");
             pieDataSet.setSliceSpace(2);
             pieDataSet.setValueTextSize(12);
 
+
             //adding colors
             ArrayList<Integer> colors=new ArrayList<>();
-            colors.add(Color.GREEN);
-            colors.add(Color.RED);
+            colors.add(Color.rgb(22,173,62));
+            colors.add(Color.rgb(193,9,25));
             pieDataSet.setColors(colors);
 
+
             //create legend
-            Legend legend=pieChart.getLegend();
+           /* Legend legend=pieChart.getLegend();
             legend.setForm(Legend.LegendForm.CIRCLE);
             legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
+*/
 
             //create a pie data object
             PieData pieData=new PieData(pieDataSet);
@@ -84,8 +82,6 @@ public class GraphActivity extends AppCompatActivity {
             pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
                 @Override
                 public void onValueSelected(Entry e, Highlight h) {
-                    Log.d(TAG,"inside onValueSelected:"+String.valueOf(e));
-                    Log.d(TAG,"y:"+String.valueOf(e.getY()));
                     if ((e.getY()==handler.getIncompleteTaskCount())){
                         Toast.makeText(GraphActivity.this,"Incomplete tasks",Toast.LENGTH_SHORT).show();
                     }
@@ -93,7 +89,7 @@ public class GraphActivity extends AppCompatActivity {
                         Toast.makeText(GraphActivity.this,"Completed tasks",Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Log.d(TAG,"Values do not match");
+                        //
                     }
                 }
 
@@ -141,7 +137,9 @@ public class GraphActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     handler.deleteAllEntries();
                     Toast.makeText(GraphActivity.this,"Data Reset Successfully",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(GraphActivity.this,MainActivity.class));
+                    Intent intent=new Intent(GraphActivity.this,MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
             });
         }

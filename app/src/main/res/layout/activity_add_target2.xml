@@ -82,7 +82,7 @@
         android:layout_margin="50dp"
         android:layout_marginTop="48dp"
         android:background="@drawable/border"
-        android:text="SAVE"
+        android:text="@string/string_save"
         android:textColor="#FFFFFF"
         android:textSize="14sp" />
 

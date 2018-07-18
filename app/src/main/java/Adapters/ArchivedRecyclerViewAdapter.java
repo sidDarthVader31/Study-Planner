@@ -16,8 +16,6 @@ import siddharthbisht.targettracker.R;
 public class ArchivedRecyclerViewAdapter extends RecyclerView.Adapter<ArchivedRecyclerViewAdapter.ViewHolder>{
     Context context;
     List<Target> targetList;
-    public static final String TAG="RecyclerVIewAdapter";
-
     public ArchivedRecyclerViewAdapter(Context context, List<Target> targetList) {
         this.context=context;
         this.targetList=targetList;

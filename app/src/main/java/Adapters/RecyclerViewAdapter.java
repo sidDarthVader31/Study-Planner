@@ -4,20 +4,13 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.List;
-
-import Activities.MainActivity;
 import Data.DataBaseHandler;
 import Model.Target;
 import Util.AlarmCreater;
@@ -29,9 +22,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private AlertDialog.Builder alertDiaologBuilder;
     private AlertDialog dialog;
     private LayoutInflater inflater;
-    DataBaseHandler db;
-    AlarmCreater creater;
-    public static final String TAG="RecyclerVIewAdapter";
+    public DataBaseHandler db;
+    public AlarmCreater creater;
 
     public RecyclerViewAdapter(Context context, List<Target> targetList) {
         this.context=context;
@@ -59,36 +51,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void removeTarget(final Target target, final int position) {
 
-        alertDiaologBuilder=new AlertDialog.Builder(context);
-        inflater=LayoutInflater.from(context);
-        View view=inflater.inflate(R.layout.confirmation_dialog,null);
-        Button noButton=view.findViewById(R.id.noButton);
-        Button yesButton=view.findViewById(R.id.yesButton);
-        alertDiaologBuilder.setView(view);
-        dialog=alertDiaologBuilder.create();
-        dialog.show();
-        noButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-            }
-        });
-
-        yesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //delete the item
-                long time = getTimeInMillis(target.getFinishYear(), target.getFinishMonth(), target.getFinishDate(), target.getFinishHour(), target.getFinishMinute());
-                creater = new AlarmCreater();
-                creater.DeleteAlarm(context, target.getId(), target.getTopic(), time);
-                creater.DeleteDueStatus(context,target.getId(),time);
-                db.DeleteTarget(target.getId());
-                targetList.remove(position);
-                notifyItemRemoved(position);
-                //todo: returning a null pointer exception here...check it ..debug it..
-            }
-        });
+        //delete the item
+        long time = getTimeInMillis(target.getFinishYear(), target.getFinishMonth(), target.getFinishDate(), target.getFinishHour(), target.getFinishMinute());
+        creater = new AlarmCreater();
+        creater.DeleteAlarm(context, target.getId(), target.getTopic(), time);
+        creater.DeleteDueStatus(context,target.getId(),time);
+        db.DeleteTarget(target.getId());
+        targetList.remove(position);
+        notifyItemRemoved(position);
     }
     public  class ViewHolder extends RecyclerView.ViewHolder {
         public TextView taskName;
@@ -110,60 +80,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void moveToDone(Target target,int position){
         db.updateCompletionStatus(target.getId());
         targetList.remove(position);
-        Target target1=db.getTarget(target.getId());
         notifyDataSetChanged();
         notifyItemRemoved(position);
-        Log.d(TAG,target.getTopic()+" removed");
-        Log.d(TAG,"completion status: "+target1.getCompletionStatus());
-        Log.d(TAG,"due status: "+target1.getDue());
     }
 
     public long getTimeInMillis(int year,int month,int date,int hour,int minutes){
         Calendar calendar=Calendar.getInstance();
         calendar.set(year,month,date,hour,minutes,0);
-        Log.d("time:",String.valueOf(year)+"/"+String.valueOf(month)+"/"+String.valueOf(date)+" //"+String.valueOf(hour)+":"+String.valueOf(minutes));
         return calendar.getTimeInMillis();
     }
-    /*private void deleteItem(int id,int position) {
 
-       alertDiaologBuilder=new AlertDialog.Builder(context);
-        inflater=LayoutInflater.from(context);
-        View view=inflater.inflate(R.layout.confirmation_dialog,null);
-        Button noButton=view.findViewById(R.id.noButton);
-        Button yesButton=view.findViewById(R.id.yesButton);
-        alertDiaologBuilder.setView(view);
-        dialog=alertDiaologBuilder.create();
-        dialog.show();
-        noButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-            }
-        });
-
-       yesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //delete the item
-                db=new DataBaseHandler(context);
-                Target target=db.getTarget(id);
-                long time=getTimeInMillis(target.getFinishYear(),target.getFinishMonth(),target.getFinishDate(),target.getFinishHour(),target.getFinishMinute());
-                creater=new AlarmCreater();
-                creater.DeleteAlarm(context,id,target.getTopic(),time);
-                db.DeleteTarget(id);
-                targetList.remove(position);
-                notifyItemRemoved(position);
-                dialog.dismiss();
-            }
-        });
-        db=new DataBaseHandler(context);
-        Target target=db.getTarget(id);
-        long time=getTimeInMillis(target.getFinishYear(),target.getFinishMonth(),target.getFinishDate(),target.getFinishHour(),target.getFinishMinute());
-        creater=new AlarmCreater();
-        creater.DeleteAlarm(context,id,target.getTopic(),time);
-        db.DeleteTarget(id);
-        targetList.remove(position);
-        notifyItemRemoved(position);
-    }*/
 }

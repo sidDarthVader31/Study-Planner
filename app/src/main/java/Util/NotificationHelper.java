@@ -18,12 +18,11 @@ import Receiver.SetDueOnComplete;
 import siddharthbisht.targettracker.R;
 
 public class NotificationHelper extends ContextWrapper {
-    public static final String CHANNEL_ID="CHANNEL1";
-    public static final String CHANNEL_NAME="ChannelName";
+    public static final String CHANNEL_ID="Study_Planner_id_1";
+    public static final String CHANNEL_NAME="Study Planner";
     public NotificationManager mManager;
     public NotificationHelper(Context base) {
         super(base);
-        Log.d("helper","inside helper");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             createChannel();
         }
@@ -37,18 +36,15 @@ public class NotificationHelper extends ContextWrapper {
         channel.enableVibration(true);
         channel.setLightColor(R.color.colorPrimary);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-        Log.d("helper","channel created");
         getManager().createNotificationChannel(channel);
     }
     public NotificationManager getManager(){
         if(mManager==null){
             mManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-            Log.d("helper","manager created");
         }
         return mManager;
     }
     public NotificationCompat.Builder getChannelNotification(String title,String message){
-        Log.d("helper","building notification ");
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
@@ -57,7 +53,7 @@ public class NotificationHelper extends ContextWrapper {
 
         return new NotificationCompat.Builder(getApplicationContext(),CHANNEL_ID)
                 .setContentTitle(title)
-                .setSmallIcon(R.drawable.ic_timer_black_notification_24dp)
+                .setSmallIcon(R.drawable.icon_notification)
                 .setContentText(message)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);

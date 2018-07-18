@@ -31,11 +31,8 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
     private int sYear, sMonth, sDate, sHour, sMinute;
     public AlarmCreater creater;
     public Validator validator;
-    public static final String TAG="AddTargetActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG," inside on create");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_target2);
         etTopic = findViewById(R.id.etAddTopicName);
@@ -69,13 +66,9 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
         String sTimeStr=mHour+":"+mMinute;
         date.setText(sDateStr);
         time.setText(sTimeStr);
-        String s=mYear+"/"+mMonth+"/"+mDay;
-        Log.d("TodayDate:",s);
         sYear=mYear;
         sMonth=mMonth;
         sDate=mDay;
-        String s1=sDate+"/"+(sMonth)+"/"+sYear;
-        Log.d("currentDate:",s1);
         sHour=mHour;
         sMinute=mMinute;
     }
@@ -95,8 +88,6 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
                                 sMonth=monthOfYear;
                                 sDate=dayOfMonth;
                                 date.setText(sDate + "-" + (sMonth + 1) + "-" + sYear);
-                                String s=sYear+"/"+(sMonth+1)+"/"+sDate;
-                                Log.d("DatePicker:",s);
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -112,8 +103,6 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
                                 sHour=hourOfDay;
                                 sMinute=minute;
                                 time.setText(sHour+ ":" +sMinute);
-                                String s=sHour+":"+sMinute;
-                                Log.d("TimePicker:",s);
 
                             }
                         }, mHour, mMinute, false);
@@ -137,9 +126,7 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
                         Toast.makeText(AddTargetActivity.this,"Enter time atleast an hour ahead",Toast.LENGTH_SHORT).show();
                     }
                 }
-
-                Log.d("Inside button:", String.valueOf(sYear) + "/" + String.valueOf(sMonth) + "/" + String.valueOf(sDate) + " //" + String.valueOf(sHour) + ":" + String.valueOf(sMinute));
-                }
+                  }
     }
 
 
@@ -156,9 +143,7 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
         target.setCompletionStatus(0);
         //Save to database
         handler.addTarget(target);
-        Log.d("added target:",target.getTopic());
         int id=handler.getLastItem().getId();
-        Log.d("added item id:",String.valueOf(id));
         //Getting alarm time in millis
         Long timeinMillis=getTimeInMillis(year,month,date,hours,minutes);
         creater.setDueStatus(AddTargetActivity.this,id,(timeinMillis));
@@ -177,7 +162,6 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
     public long getTimeInMillis(int year,int month,int date,int hour,int minutes){
         Calendar calendar=Calendar.getInstance();
         calendar.set(year,month,date,hour,minutes,0);
-        Log.d("time:",String.valueOf(year)+"/"+String.valueOf(month)+"/"+String.valueOf(date)+" //"+String.valueOf(hour)+":"+String.valueOf(minutes));
         return calendar.getTimeInMillis();
     }
 }

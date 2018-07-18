@@ -1,6 +1,6 @@
 package Fragments;
 
-import android.content.Context;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import Activities.MainActivity;
 import Adapters.ArchivedRecyclerViewAdapter;
-import Adapters.RecyclerViewAdapter;
 import Data.DataBaseHandler;
 import Model.Target;
 import siddharthbisht.targettracker.R;
@@ -28,8 +28,6 @@ public class CompletedTaskFragment extends Fragment{
     private List<Target> targetList;
     private List<Target> listItems;
     private DataBaseHandler db;
-    private static final String TAG="COMPLETEDTASKFRAGMENT";
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,6 +44,8 @@ public class CompletedTaskFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ((MainActivity) getActivity())
+                .setActionBarTitle("Completed");
         db=new DataBaseHandler(this.getContext());
         View view;
         if (db.getCompletedTaskCount()>0){
@@ -78,9 +78,6 @@ public class CompletedTaskFragment extends Fragment{
             target.setFinishMinute(c.getFinishMinute());
             target.setId(c.getId());
             listItems.add(target);
-            Log.d(TAG,target.getTopic()+" added");
-            Log.d(TAG,String.valueOf(target.getCompletionStatus()));
-
         }
         Collections.reverse(listItems);
         adapter=new ArchivedRecyclerViewAdapter(this.getContext(),listItems);

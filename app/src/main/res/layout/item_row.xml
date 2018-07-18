@@ -67,7 +67,21 @@
             android:text="@string/string_mark_as_complete"
             android:textColor="#fff"
             android:textSize="13dp"
+            android:id="@+id/tvMarkAs"
             android:fontFamily="sans-serif"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/padd_10"
+            android:layout_toRightOf="@+id/ivMoveToDone"
+            android:layout_below="@+id/tvMarkAs"
+            android:text="@string/string_complete"
+            android:textColor="#fff"
+            android:textSize="13dp"
+            android:id="@+id/tvComplete"
+            android:fontFamily="sans-serif"/>
+
 
     </RelativeLayout>
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,18 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
 import Data.DataBaseHandler;
 import Fragments.CompletedTaskFragment;
 import Fragments.CurrentTaskFragment;
-import Fragments.DefaultFragment;
 import Fragments.NotCompletedTaskFragment;
 import siddharthbisht.targettracker.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, CurrentTaskFragment.OnFragmentInteractionListener,
-        CompletedTaskFragment.OnFragmentInteractionListener, NotCompletedTaskFragment.OnFragmentInteractionListener,DefaultFragment.OnFragmentInteractionListener{
+        CompletedTaskFragment.OnFragmentInteractionListener, NotCompletedTaskFragment.OnFragmentInteractionListener{
     DataBaseHandler handler;
 
     @Override
@@ -36,14 +32,11 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         handler=new DataBaseHandler(this);
-        //byPassActivity();
 
         FloatingActionButton fab =  findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              // createPopup();
-
                 startActivity(new Intent(MainActivity.this,AddTargetActivity.class));
             }
         });
@@ -56,7 +49,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //byPassFragment();
         showFragment(CurrentTaskFragment.class);
     }
 
@@ -85,8 +77,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-
+        if (id == R.id.menu_about) {
+            startActivity(new Intent(MainActivity.this,AboutActivity.class));
             return true;
         }
 
@@ -107,7 +99,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.itIncompleteTask) {
             showFragment(NotCompletedTaskFragment.class);
         } else if (id == R.id.itSettings) {
-            startActivity(new Intent(MainActivity.this,GraphActivity.class));
+            Intent intent=new Intent(MainActivity.this,GraphActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
         }
 
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
@@ -128,20 +123,11 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.flContent,fragment,"CURRENTTASK")
                 .commit();
     }
-
     @Override
     public void onFragmentInteraction(Uri uri) {
         //TODO learn its implementation
     }
-
-   public void byPassFragment(){
-        if(handler.getCount()>0){
-            showFragment(CurrentTaskFragment.class);
-            finish();
-        }
-        else{
-            showFragment(DefaultFragment.class);
-        }
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
-
 }

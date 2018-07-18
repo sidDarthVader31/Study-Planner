@@ -13,8 +13,6 @@ import Util.Constants;
 
 public class DataBaseHandler extends SQLiteOpenHelper {
     Context context;
-    public static final String TAG = "Database:";
-
     public DataBaseHandler(Context context) {
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
         this.context = context;
@@ -42,7 +40,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     All the helper methods will now we defined
     CRUD OPERATIONS
      */
-
     //Method to add a target item to the database
     public void addTarget(Target target) {
         SQLiteDatabase db = getWritableDatabase();
@@ -60,7 +57,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         db.insert(Constants.TABLE_NAME, null, values);
         db.close();
     }
-
     //Getting one target item from database
     public Target getTarget(int id) {
         SQLiteDatabase db = getReadableDatabase();
@@ -81,11 +77,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         target.setFinishMinute(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_FINISH_MINUTES))));
         target.setCompletionStatus(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_COMPLETION_STATUS))));
         target.setDue(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_DUE))));
-
-        Log.d(target.getTopic(), " returned successfully");
         return target;
-
-
     }
 
     //Getting all targets  items from database
@@ -99,7 +91,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(SELECT_ALL, null, null);
 
         //loop through the cursor to get all contacts
-
         if (cursor.moveToFirst()) {
             do {
                 Target target = new Target();
@@ -114,13 +105,10 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 target.setFinishMinute(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_FINISH_MINUTES))));
                 target.setCompletionStatus(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_COMPLETION_STATUS))));
                 target.setDue(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_DUE))));
-
-
                 //adding target item to targetList
                 targetList.add(target);
             } while (cursor.moveToNext());
         }
-        Log.d("All targets extracted", " successfully");
         return targetList;
     }
 
@@ -138,7 +126,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         values.put(Constants.KEY_FINISH_MINUTES, target.getFinishMinute());
         values.put(Constants.KEY_COMPLETION_STATUS, target.getCompletionStatus());
         values.put(Constants.KEY_DUE, target.getDue());
-
         //UPDATING THE ROW
         return db.update(Constants.TABLE_NAME, values, Constants.KEY_ID + " =?", new String[]{String.valueOf(target.getId())});
     }
@@ -158,7 +145,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         values.put(Constants.KEY_FINISH_HOURS, target.getFinishHour());
         values.put(Constants.KEY_FINISH_MINUTES, target.getFinishMinute());
         values.put(Constants.KEY_COMPLETION_STATUS, target.getCompletionStatus());
-        values.put(Constants.KEY_DUE, target.getDue());
+        values.put(Constants.KEY_DUE,target.getDue());
         //UPDATING THE ROW
         return db.update(Constants.TABLE_NAME, values, Constants.KEY_ID + " =?", new String[]{String.valueOf(id)});
     }
@@ -187,7 +174,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public void DeleteTarget(int id) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(Constants.TABLE_NAME, Constants.KEY_ID + "=?", new String[]{String.valueOf(id)});
-        Log.d("deleted item id:", String.valueOf(id));
         db.close();
     }
 
@@ -222,8 +208,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public List<Target> getAllCurrentTargets() {
         SQLiteDatabase db = getReadableDatabase();
         List<Target> targetList = new ArrayList<>();
-        String where = Constants.KEY_DUE + "=?" + " OR " + Constants.KEY_COMPLETION_STATUS + "=?";
-
         //Select all contacts
         Cursor cursor = db.query(Constants.TABLE_NAME,
                 new String[]{Constants.KEY_ID, Constants.KEY_TOPIC, Constants.KEY_DATE_ADDED, Constants.KEY_TIME_ADDED, Constants.KEY_FINISH_YEAR, Constants.KEY_FINISH_MONTH, Constants.KEY_FINISH_DATE, Constants.KEY_FINISH_HOURS, Constants.KEY_FINISH_MINUTES, Constants.KEY_COMPLETION_STATUS, Constants.KEY_DUE},
@@ -244,13 +228,11 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 target.setFinishMinute(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_FINISH_MINUTES))));
                 target.setCompletionStatus(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_COMPLETION_STATUS))));
                 target.setDue(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_DUE))));
-                Log.d(TAG, "id: " + String.valueOf(target.getId()) + ":" + String.valueOf(target.getCompletionStatus()) + "," + String.valueOf(target.getDue()));
-                Log.d(TAG, "id: " + String.valueOf(target.getId()) + ":" + String.valueOf(target.getCompletionStatus()) + "," + String.valueOf(target.getDue()));
+
                 //adding target item to targetList
                 targetList.add(target);
             } while (cursor.moveToNext());
         }
-        Log.d("All current list given", " successfully");
         return targetList;
     }
 
@@ -278,12 +260,10 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 target.setFinishMinute(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_FINISH_MINUTES))));
                 target.setCompletionStatus(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_COMPLETION_STATUS))));
                 target.setDue(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_DUE))));
-                Log.d(TAG, "id: " + String.valueOf(target.getId()) + ":" + String.valueOf(target.getCompletionStatus()) + "," + String.valueOf(target.getDue()));
-                //adding target item to targetList
+                 //adding target item to targetList
                 targetList.add(target);
             } while (cursor.moveToNext());
         }
-        Log.d("Completed list:", " successful");
         return targetList;
     }
 
@@ -311,13 +291,10 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 target.setFinishMinute(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_FINISH_MINUTES))));
                 target.setCompletionStatus(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_COMPLETION_STATUS))));
                 target.setDue(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.KEY_DUE))));
-                Log.d(TAG, "id: " + String.valueOf(target.getId()) + ":" + String.valueOf(target.getCompletionStatus()) + "," + String.valueOf(target.getDue()));
-
                 //adding target item to targetList
                 targetList.add(target);
             } while (cursor.moveToNext());
         }
-        Log.d("Completed list:", " successful");
         return targetList;
     }
 
@@ -334,7 +311,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
 
     public int getDue(int id) {
-        int due = 0;
+        int due;
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(Constants.TABLE_NAME, new String[]{Constants.KEY_ID, Constants.KEY_TOPIC, Constants.KEY_DATE_ADDED, Constants.KEY_TIME_ADDED,
@@ -362,14 +339,12 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 new String[]{Constants.KEY_ID, Constants.KEY_TOPIC, Constants.KEY_DATE_ADDED, Constants.KEY_TIME_ADDED, Constants.KEY_FINISH_YEAR, Constants.KEY_FINISH_MONTH, Constants.KEY_FINISH_DATE, Constants.KEY_FINISH_HOURS, Constants.KEY_FINISH_MINUTES, Constants.KEY_COMPLETION_STATUS, Constants.KEY_DUE},
                 Constants.KEY_COMPLETION_STATUS + "=?" + "AND " + Constants.KEY_DUE + "=?", new String[]{String.valueOf(0), String.valueOf(1)}, null, null, null);
         //loop through the cursor to get all contacts
-
-
         return cursor.getCount();
 
     }
     public void deleteAllEntries(){
         SQLiteDatabase db=getWritableDatabase();
-        db.delete(Constants.TABLE_NAME,null,null);
+        db.delete(Constants.TABLE_NAME,Constants.KEY_DUE+"=?",new String[]{String.valueOf(1)});
         db.close();
     }
     public int getCurrentTaskCount(){
@@ -378,9 +353,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 new String[]{Constants.KEY_ID, Constants.KEY_TOPIC, Constants.KEY_DATE_ADDED, Constants.KEY_TIME_ADDED, Constants.KEY_FINISH_YEAR, Constants.KEY_FINISH_MONTH, Constants.KEY_FINISH_DATE, Constants.KEY_FINISH_HOURS, Constants.KEY_FINISH_MINUTES, Constants.KEY_COMPLETION_STATUS, Constants.KEY_DUE},
                 Constants.KEY_DUE + "=?" + " AND " + Constants.KEY_COMPLETION_STATUS + "=?",  new String[]{String.valueOf(0), String.valueOf(0)}, null, null, null);
         //loop through the cursor to get all contacts
-
-
         return cursor.getCount();
-
     }
 }

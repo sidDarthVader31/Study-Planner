@@ -2,19 +2,15 @@ package Fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
+import Activities.MainActivity;
 import Adapters.RecyclerViewAdapter;
 import Data.DataBaseHandler;
 import Model.Target;
@@ -22,7 +18,7 @@ import Util.RecyclerItemTouchHelper;
 import siddharthbisht.targettracker.R;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.Toast;
-
+import android.support.v4.app.Fragment;
 
 public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     RecyclerView recyclerView;
@@ -37,6 +33,13 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
     public CurrentTaskFragment() {
         // Required empty public constructor
     }
+    private Boolean firstTime = null;
+    /**
+     * Checks if the user is opening the app for the first time.
+     * Note that this method should be placed inside an activity and it can be called multiple times.
+     * @return boolean
+     */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,8 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ((MainActivity) getActivity())
+            .setActionBarTitle("Current Tasks");
         db=new DataBaseHandler(this.getContext());
         View view;
         if (db.getCurrentTaskCount()>0){
@@ -96,32 +101,25 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
             target.setFinishMinute(c.getFinishMinute());
             target.setId(c.getId());
             listItems.add(target);
-            Log.d(TAG,target.getTopic()+" added");
-            Log.d(TAG,String.valueOf(target.getCompletionStatus()));
-
         }
-        Collections.reverse(listItems);
         adapter=new RecyclerViewAdapter(this.getContext(),listItems);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        Log.d(TAG,"direction"+String.valueOf(direction));
         if (viewHolder instanceof RecyclerViewAdapter.ViewHolder) {
             if (direction == ItemTouchHelper.LEFT) {
                 // get the removed item name to display it in snack bar
                 Target target=targetList.get(viewHolder.getAdapterPosition());
-              Toast.makeText(getContext(),target.getTopic()+" deleted",Toast.LENGTH_SHORT).show();
               adapter.removeTarget(target,viewHolder.getAdapterPosition());
-              Log.d(TAG,"direction Left:"+String.valueOf(direction));
+              Toast.makeText(getContext(),target.getTopic()+" deleted successfully",Toast.LENGTH_SHORT).show();
             }
             else if (direction==ItemTouchHelper.RIGHT){
                 String name = targetList.get(viewHolder.getAdapterPosition()).getTopic();
                 Toast.makeText(getContext(), name+" is marked as complete", Toast.LENGTH_SHORT).show();
                 Target target = targetList.get(viewHolder.getAdapterPosition());
                 adapter.moveToDone(target, viewHolder.getAdapterPosition());
-                Log.d(TAG,"direction Right:"+String.valueOf(direction));
             }
         }
     }

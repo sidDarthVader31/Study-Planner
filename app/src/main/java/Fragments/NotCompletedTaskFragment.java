@@ -6,17 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import Activities.MainActivity;
 import Adapters.ArchivedRecyclerViewAdapter;
-import Adapters.RecyclerViewAdapter;
 import Data.DataBaseHandler;
 import Model.Target;
 import siddharthbisht.targettracker.R;
@@ -27,9 +24,6 @@ public class NotCompletedTaskFragment extends Fragment {
     private List<Target> targetList;
     private List<Target> listItems;
     private DataBaseHandler db;
-    private static final String TAG="COMPLETEDTASKFRAGMENT";
-
-
     private OnFragmentInteractionListener mListener;
 
     public NotCompletedTaskFragment() {
@@ -47,6 +41,8 @@ public class NotCompletedTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((MainActivity) getActivity())
+                .setActionBarTitle("Incomplete");
         db=new DataBaseHandler(this.getContext());
         View view;
         if (db.getIncompleteTaskCount()>0){
@@ -82,9 +78,6 @@ public class NotCompletedTaskFragment extends Fragment {
             target.setFinishMinute(c.getFinishMinute());
             target.setId(c.getId());
             listItems.add(target);
-            Log.d(TAG,target.getTopic()+" added");
-            Log.d(TAG,String.valueOf(target.getCompletionStatus()));
-
         }
         Collections.reverse(listItems);
         adapter=new ArchivedRecyclerViewAdapter(this.getContext(),listItems);
