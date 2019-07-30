@@ -1,5 +1,5 @@
-# TargetTracker
-Target Tracker is a simple android project aimed at providing better planning and tracking to students.
+# Study Planner
+Study Planner is a simple android project aimed at providing better planning and tracking to students.
 Students can plan their day accordingly and in turn this app keeps a track of all the activities a user has to do and reminds them prior to the elapsed time.
 Apart from this this application also keeps a track of all the previous records of the user, providing user details about the task they completed or were unable to do so.
 Also,for more motivation it provides a graph for better visualization so that user can see how much they are on the right track.
