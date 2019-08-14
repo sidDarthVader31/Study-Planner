@@ -1,5 +1,6 @@
-package Fragments;
+package currentTask;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,8 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import Activities.MainActivity;
+
+import Util.AlarmCreater;
+import mainActivity.MainActivity;
 import Adapters.RecyclerViewAdapter;
 import Data.DataBaseHandler;
 import Model.Target;
@@ -25,20 +29,14 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
     private RecyclerViewAdapter adapter;
     private List<Target> targetList;
     private List<Target> listItems;
-    private DataBaseHandler db;
+    private CurrentTaskViewModel currentTaskViewModel;
     private static final String TAG="CURRENTTASKFRAGMENT";
-
-    private OnFragmentInteractionListener mListener;
+    public AlarmCreater creater;
 
     public CurrentTaskFragment() {
         // Required empty public constructor
     }
-    private Boolean firstTime = null;
-    /**
-     * Checks if the user is opening the app for the first time.
-     * Note that this method should be placed inside an activity and it can be called multiple times.
-     * @return boolean
-     */
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,15 +48,16 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
         // Inflate the layout for this fragment
         ((MainActivity) getActivity())
             .setActionBarTitle("Current Tasks");
-        db=new DataBaseHandler(this.getContext());
+       currentTaskViewModel= ViewModelProviders.of(this).get(CurrentTaskViewModel.class);
         View view;
-        if (db.getCurrentTaskCount()>0){
+        if (currentTaskViewModel.getCurrentTasksCount()>0){
              view= inflater.inflate(R.layout.fragment_current_task, container, false);
             recyclerView=view.findViewById(R.id.rvList);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
             targetList=new ArrayList<>();
             listItems=new ArrayList<>();
+            creater=new AlarmCreater();
             initializeData();
             ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT, this);
             new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
@@ -89,7 +88,7 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
 
         //Get items from database
 
-        targetList=db.getAllCurrentTargets();
+        targetList=currentTaskViewModel.getCurrentTasks();
 
         for(Target c: targetList){
             Target target=new Target();
@@ -111,17 +110,34 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
         if (viewHolder instanceof RecyclerViewAdapter.ViewHolder) {
             if (direction == ItemTouchHelper.LEFT) {
                 // get the removed item name to display it in snack bar
-                Target target=targetList.get(viewHolder.getAdapterPosition());
-              adapter.removeTarget(target,viewHolder.getAdapterPosition());
-              Toast.makeText(getContext(),target.getTopic()+" deleted successfully",Toast.LENGTH_SHORT).show();
+              currentTaskViewModel.removeTarget(listItems.get(position).getId());
+                long time = getTimeInMillis(
+                        listItems.get(position).getFinishYear(),
+                        listItems.get(position).getFinishMonth(),
+                        listItems.get(position).getFinishDate(),
+                        listItems.get(position).getFinishHour(),
+                        listItems.get(position).getFinishMinute());
+                creater = new AlarmCreater();
+                creater.DeleteAlarm(getActivity(),
+                        listItems.get(position).getId(),
+                        listItems.get(position).getTopic(), time);
+                creater.DeleteDueStatus(
+                        getActivity(),
+                        listItems.get(position).getId(),time);
+              adapter.notifyDataSetChanged();
+              Toast.makeText(getContext(),listItems.get(position).getTopic()+" deleted successfully",Toast.LENGTH_SHORT).show();
             }
             else if (direction==ItemTouchHelper.RIGHT){
-                String name = targetList.get(viewHolder.getAdapterPosition()).getTopic();
-                Toast.makeText(getContext(), name+" is marked as complete", Toast.LENGTH_SHORT).show();
-                Target target = targetList.get(viewHolder.getAdapterPosition());
-                adapter.moveToDone(target, viewHolder.getAdapterPosition());
+                Toast.makeText(getContext(),  targetList.get(viewHolder.getAdapterPosition()).getTopic()+" is marked as complete", Toast.LENGTH_SHORT).show();
+                currentTaskViewModel.markAsDone(listItems.get(position).getId());
+                adapter.notifyDataSetChanged();
             }
         }
+    }
+    public long getTimeInMillis(int year,int month,int date,int hour,int minutes){
+        Calendar calendar=Calendar.getInstance();
+        calendar.set(year,month,date,hour,minutes,0);
+        return calendar.getTimeInMillis();
     }
 
 }

@@ -1,4 +1,5 @@
-package Activities;
+package GraphActivity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
@@ -18,26 +19,27 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import java.util.ArrayList;
+
+import mainActivity.MainActivity;
 import Data.DataBaseHandler;
 import siddharthbisht.targettracker.R;
 
 
 public class GraphActivity extends AppCompatActivity {
-    private DataBaseHandler handler;
+
     PieChart pieChart;
     private AlertDialog.Builder alertDiaologBuilder;
     private AlertDialog dialog;
     private LayoutInflater inflater;
-
-
+    private GraphActivityViewModel graphActivityViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GraphActivity.this.setTitle("Your Progress");
-        handler=new DataBaseHandler(this);
-        if (handler.getCompletedTaskCount()>0 || handler.getIncompleteTaskCount()>0){
+        graphActivityViewModel= ViewModelProviders.of(this).get(GraphActivityViewModel.class);
+        if (graphActivityViewModel.getCompletedTaskCount()>0 || graphActivityViewModel.getIncompletedTaskCount()>0){
             setContentView(R.layout.activity_graph);
-            handler=new DataBaseHandler(this);
+
             pieChart=findViewById(R.id.pcPieChart);
             pieChart.setRotationEnabled(true);
             pieChart.setUsePercentValues(true);
@@ -46,7 +48,8 @@ public class GraphActivity extends AppCompatActivity {
             pieChart.setCenterText("Statistics");
             ArrayList<PieEntry> yAxis=new ArrayList<>();
             ArrayList<String> xAxis=new ArrayList<>();
-            int[] yValues={handler.getCompletedTaskCount(),handler.getIncompleteTaskCount()};
+            int[] yValues={graphActivityViewModel.getCompletedTaskCount(),
+                    graphActivityViewModel.getIncompletedTaskCount()};
             String[] xData={"Completed Task","Incomplete Task"};
             for (int i=0;i<yValues.length;i++){
                 yAxis.add(new PieEntry(yValues[i],i));
@@ -82,10 +85,10 @@ public class GraphActivity extends AppCompatActivity {
             pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
                 @Override
                 public void onValueSelected(Entry e, Highlight h) {
-                    if ((e.getY()==handler.getIncompleteTaskCount())){
+                    if ((e.getY()==graphActivityViewModel.getIncompletedTaskCount())){
                         Toast.makeText(GraphActivity.this,"Incomplete tasks",Toast.LENGTH_SHORT).show();
                     }
-                    else if(e.getY()==handler.getCompletedTaskCount()){
+                    else if(e.getY()==graphActivityViewModel.getCompletedTaskCount()){
                         Toast.makeText(GraphActivity.this,"Completed tasks",Toast.LENGTH_SHORT).show();
                     }
                     else {
@@ -135,9 +138,9 @@ public class GraphActivity extends AppCompatActivity {
             yesButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    handler.deleteAllEntries();
+                    graphActivityViewModel.deleteAllEnteries();
                     Toast.makeText(GraphActivity.this,"Data Reset Successfully",Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(GraphActivity.this,MainActivity.class);
+                    Intent intent=new Intent(GraphActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }

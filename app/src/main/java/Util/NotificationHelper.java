@@ -11,9 +11,8 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
-import Activities.MainActivity;
+import mainActivity.MainActivity;
 import Receiver.SetDueOnComplete;
 import siddharthbisht.targettracker.R;
 

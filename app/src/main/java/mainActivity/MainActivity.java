@@ -1,8 +1,7 @@
-package Activities;
+package mainActivity;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
@@ -14,16 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import Data.DataBaseHandler;
-import Fragments.CompletedTaskFragment;
-import Fragments.CurrentTaskFragment;
-import Fragments.NotCompletedTaskFragment;
+
+import completedTask.CompletedTaskFragment;
+import currentTask.CurrentTaskFragment;
+import notCompletedTask.NotCompletedTaskFragment;
+import GraphActivity.GraphActivity;
+import aboutActivity.AboutActivity;
+import addtargetActivity.AddTargetActivity;
 import siddharthbisht.targettracker.R;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CurrentTaskFragment.OnFragmentInteractionListener,
-        CompletedTaskFragment.OnFragmentInteractionListener, NotCompletedTaskFragment.OnFragmentInteractionListener{
-    DataBaseHandler handler;
+        implements NavigationView.OnNavigationItemSelectedListener{
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +32,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        handler=new DataBaseHandler(this);
+
 
         FloatingActionButton fab =  findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,AddTargetActivity.class));
+                startActivity(new Intent(MainActivity.this, AddTargetActivity.class));
             }
         });
 
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_about) {
-            startActivity(new Intent(MainActivity.this,AboutActivity.class));
+            startActivity(new Intent(MainActivity.this, AboutActivity.class));
             return true;
         }
 
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.itIncompleteTask) {
             showFragment(NotCompletedTaskFragment.class);
         } else if (id == R.id.itSettings) {
-            Intent intent=new Intent(MainActivity.this,GraphActivity.class);
+            Intent intent=new Intent(MainActivity.this, GraphActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
@@ -123,10 +124,7 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.flContent,fragment,"CURRENTTASK")
                 .commit();
     }
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        //TODO learn its implementation
-    }
+
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }

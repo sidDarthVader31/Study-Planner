@@ -1,12 +1,12 @@
-package Fragments;
+package completedTask;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import Activities.MainActivity;
+import mainActivity.MainActivity;
 import Adapters.ArchivedRecyclerViewAdapter;
 import Data.DataBaseHandler;
 import Model.Target;
@@ -27,10 +27,7 @@ public class CompletedTaskFragment extends Fragment{
     private ArchivedRecyclerViewAdapter adapter;
     private List<Target> targetList;
     private List<Target> listItems;
-    private DataBaseHandler db;
-
-    private OnFragmentInteractionListener mListener;
-
+    private CompletedTaskViewModel completedTaskViewModel;
     public CompletedTaskFragment() {
         // Required empty public constructor
     }
@@ -46,11 +43,10 @@ public class CompletedTaskFragment extends Fragment{
         // Inflate the layout for this fragment
         ((MainActivity) getActivity())
                 .setActionBarTitle("Completed");
-        db=new DataBaseHandler(this.getContext());
+       completedTaskViewModel= ViewModelProviders.of(this).get(CompletedTaskViewModel.class);
         View view;
-        if (db.getCompletedTaskCount()>0){
+        if (completedTaskViewModel.getCompletedTaskCount()>0){
             view= inflater.inflate(R.layout.fragment_completed_task, container, false);
-
             recyclerView=view.findViewById(R.id.rvListArchived);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -67,7 +63,7 @@ public class CompletedTaskFragment extends Fragment{
 
     public void initializeData(){
         //Get items from database
-        targetList=db.getAllCompletedTargets();
+        targetList=completedTaskViewModel.getCompletedTask();
         for(Target c: targetList){
             Target target=new Target();
             target.setTopic(c.getTopic());

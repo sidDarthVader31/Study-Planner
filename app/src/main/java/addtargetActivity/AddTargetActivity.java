@@ -1,12 +1,13 @@
-package Activities;
+package addtargetActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.Calendar;
+
+import mainActivity.MainActivity;
 import Data.DataBaseHandler;
 import Model.Target;
 import Util.AlarmCreater;
@@ -26,20 +29,26 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
     private TextView date;
     private TextView time;
     private Button submit;
-    DataBaseHandler handler;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private int sYear, sMonth, sDate, sHour, sMinute;
     public AlarmCreater creater;
     public Validator validator;
+    private AddTargetActivityViewModel addTargetActivityViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_target2);
+        addTargetActivityViewModel= ViewModelProviders.of(this).get(AddTargetActivityViewModel.class);
+        initViews();
+        initializeDateTime();
+    }
+
+    private void initViews(){
         etTopic = findViewById(R.id.etAddTopicName);
         date = findViewById(R.id.tvDateToStore);
         time = findViewById(R.id.tvTimeToStore);
         submit = findViewById(R.id.btSubmitAdd);
-        handler=new DataBaseHandler(this);
+
         date.setOnClickListener(this);
         time.setOnClickListener(this);
         submit.setOnClickListener(this);
@@ -141,9 +150,8 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
         target.setFinishMinute(minutes);
         target.setDue(0);
         target.setCompletionStatus(0);
-        //Save to database
-        handler.addTarget(target);
-        int id=handler.getLastItem().getId();
+        addTargetActivityViewModel.saveTargetToDB(target);
+        int id=addTargetActivityViewModel.getLastItemId();
         //Getting alarm time in millis
         Long timeinMillis=getTimeInMillis(year,month,date,hours,minutes);
         creater.setDueStatus(AddTargetActivity.this,id,(timeinMillis));
@@ -152,7 +160,7 @@ public class AddTargetActivity extends AppCompatActivity implements View.OnClick
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(AddTargetActivity.this,MainActivity.class);
+                Intent intent=new Intent(AddTargetActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
