@@ -24,6 +24,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
+
 public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
@@ -32,6 +33,8 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
     private CurrentTaskViewModel currentTaskViewModel;
     private static final String TAG="CURRENTTASKFRAGMENT";
     public AlarmCreater creater;
+
+
 
     public CurrentTaskFragment() {
         // Required empty public constructor
@@ -65,6 +68,7 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
         else{
             view=inflater.inflate(R.layout.empty_main_layout,container,false);
         }
+
         return view;
     }
 
@@ -89,19 +93,7 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
         //Get items from database
 
         targetList=currentTaskViewModel.getCurrentTasks();
-
-        for(Target c: targetList){
-            Target target=new Target();
-            target.setTopic(c.getTopic());
-            target.setFinishDate(c.getFinishDate());
-            target.setFinishMonth(c.getFinishMonth());
-            target.setFinishYear(c.getFinishYear());
-            target.setFinishHour(c.getFinishHour());
-            target.setFinishMinute(c.getFinishMinute());
-            target.setId(c.getId());
-            listItems.add(target);
-        }
-        adapter=new RecyclerViewAdapter(this.getContext(),listItems);
+        adapter=new RecyclerViewAdapter(this.getContext(),targetList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -110,26 +102,29 @@ public class CurrentTaskFragment extends Fragment implements  RecyclerItemTouchH
         if (viewHolder instanceof RecyclerViewAdapter.ViewHolder) {
             if (direction == ItemTouchHelper.LEFT) {
                 // get the removed item name to display it in snack bar
-              currentTaskViewModel.removeTarget(listItems.get(position).getId());
+              currentTaskViewModel.removeTarget(targetList.get(position).getId());
+              String name=targetList.get(position).getTopic();
                 long time = getTimeInMillis(
-                        listItems.get(position).getFinishYear(),
-                        listItems.get(position).getFinishMonth(),
-                        listItems.get(position).getFinishDate(),
-                        listItems.get(position).getFinishHour(),
-                        listItems.get(position).getFinishMinute());
+                        targetList.get(position).getFinishYear(),
+                        targetList.get(position).getFinishMonth(),
+                        targetList.get(position).getFinishDate(),
+                        targetList.get(position).getFinishHour(),
+                        targetList.get(position).getFinishMinute());
                 creater = new AlarmCreater();
                 creater.DeleteAlarm(getActivity(),
-                        listItems.get(position).getId(),
-                        listItems.get(position).getTopic(), time);
+                        targetList.get(position).getId(),
+                        targetList.get(position).getTopic(), time);
                 creater.DeleteDueStatus(
                         getActivity(),
-                        listItems.get(position).getId(),time);
+                        targetList.get(position).getId(),time);
+                targetList.remove(position);
               adapter.notifyDataSetChanged();
-              Toast.makeText(getContext(),listItems.get(position).getTopic()+" deleted successfully",Toast.LENGTH_SHORT).show();
+              Toast.makeText(getContext(),name+" deleted successfully",Toast.LENGTH_SHORT).show();
             }
             else if (direction==ItemTouchHelper.RIGHT){
                 Toast.makeText(getContext(),  targetList.get(viewHolder.getAdapterPosition()).getTopic()+" is marked as complete", Toast.LENGTH_SHORT).show();
-                currentTaskViewModel.markAsDone(listItems.get(position).getId());
+                currentTaskViewModel.markAsDone(targetList.get(position).getId());
+                targetList.remove(position);
                 adapter.notifyDataSetChanged();
             }
         }
